@@ -1,24 +1,23 @@
+// @flow
+
 import React, { Component } from 'react';
 
 // import { StyleSheet, Text, View } from 'react-native';
 import {
   Container,
-  Header,
   Content,
   Text,
-  Body,
-  Right,
   Button,
   Footer,
   FooterTab,
-  Icon,
-  Title,
-  Left
+  Icon
 } from 'native-base';
 import { UIManager, LayoutAnimation, Alert } from 'react-native';
 import { authorize, refresh, revoke } from 'react-native-app-auth';
 
-import InstitutionList from './Components/InstitutionList';
+import InstitutionList from './components/InstitutionList';
+import Heading from './components/Heading';
+import PatientInfo from './components/PatientInfo';
 
 UIManager.setLayoutAnimationEnabledExperimental &&
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -119,29 +118,12 @@ export default class App extends Component<{}, State> {
 
     return (
       <Container>
-        <Header>
-          <Left />
-          <Body>
-            <Title>
-              SMART Pilot
-              <Icon
-                type="FontAwesome"
-                name="plane"
-                style={{ color: 'white' }}
-              />
-            </Title>
-          </Body>
-          <Right />
-        </Header>
+        <Heading />
         <Content>
-          {!state.accessToken ? (
-            <InstitutionList institutions={organizationList} />
-          ) : (
-            <PatientInfo />
-          )}
+          {!state.accessToken ? <InstitutionList /> : <PatientInfo />}
         </Content>
         <Footer>
-          {state.accessToken && (
+          {!!state.accessToken && (
             <FooterTab>
               <Button vertical>
                 <Icon name="apps" />
