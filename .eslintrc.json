@@ -1,8 +1,18 @@
 {
-  "extends": ["airbnb", "prettier"],
-  "parser": "babel-eslint",
+  "extends": [
+    "prettier",
+    "formidable/configurations/es6-react",
+    "plugin:flowtype/recommended"
+  ],
+  "plugins": ["flowtype"],
   "rules": {
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "filenames/match-exported": 0,
+    "filenames/match-regex": 0,
+    "quotes": "off",
+    "flowtype/no-types-missing-file-annotation": 0,
+    "arrow-parens": "off",
+    "no-invalid-this": 0
   },
   "globals": {
     "fetch": false

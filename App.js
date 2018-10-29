@@ -1,152 +1,112 @@
-import React from 'react'
+// @flow
+
+import React, { Component } from 'react';
+
 // import { StyleSheet, Text, View } from 'react-native';
-import { Font, AppLoading } from 'expo'
-import {
-  Container,
-  Header,
-  Content,
-  Text,
-  Body,
-  Right,
-  Button,
-  Footer,
-  FooterTab,
-  Icon,
-  Title,
-  Spinner,
-  Left,
-} from 'native-base'
-import InstitutionList from './Components/InstitutionList'
+import { UIManager, LayoutAnimation, Alert } from 'react-native';
+import { authorize, refresh, revoke } from 'react-native-app-auth';
 
-export default class App extends React.Component {
+import InstitutionList from './components/InstitutionList';
+import Heading from './components/Heading';
+import PatientInfo from './components/PatientInfo';
+
+UIManager.setLayoutAnimationEnabledExperimental &&
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+
+type State = {
+  hasLoggedInOnce: boolean,
+  accessToken: ?string,
+  accessTokenExpirationDate: ?string,
+  refreshToken: ?string
+};
+
+const config = {
+  clientId: 'any-string-for-smart-smart-sandbox',
+  clientSecret: 'any-string-for-smart-sandbox',
+  redirectUrl: 'com.smartpilot.app://redirect',
+  scopes: ['profile', 'patient/*.*'],
+  serviceConfiguration: {
+    authorizationEndpoint:
+      'https://launch.smarthealthit.org/v/r3/sim/eyJrIjoiMSJ9/auth/authorize',
+    tokenEndpoint:
+      'https://launch.smarthealthit.org/v/r3/sim/eyJrIjoiMSJ9/auth/token'
+  }
+};
+
+export default class App extends Component<{}, State> {
   state = {
-    //   {
-    //     OrganizationName: 'Access Community Health Network',
-    //     FHIRPatientFacingURI:
-    //       'https://eprescribing.accesscommunityhealth.net/FHIR/api/FHIR/DSTU2/',
-    //   },
-    //   {
-    //     OrganizationName: 'AdvantageCare Physicians',
-    //     FHIRPatientFacingURI:
-    //       'https://epwebapps.acpny.com/FHIRproxy/api/FHIR/DSTU2/',
-    //   },
-    //   {
-    //     OrganizationName: 'Allegheny Health Network',
-    //     FHIRPatientFacingURI:
-    //       'https://epicprisfd01.wpahs.org/PRD-FHIR/api/FHIR/DSTU2/',
-    //   },
-    //   {
-    //     OrganizationName: 'Allina Health System',
-    //     FHIRPatientFacingURI:
-    //       'https://webproxy.allina.com/FHIR/api/FHIR/DSTU2/',
-    //   },
-    //   {
-    //     OrganizationName: 'Altru Health System',
-    //     FHIRPatientFacingURI: 'https://epicsoap.altru.org/fhir/api/FHIR/DSTU2/',
-    //   },
-    //   {
-    //     OrganizationName: 'Anne Arundel Medical Center',
-    //     FHIRPatientFacingURI: 'https://epicarr.aahs.org/fhir/api/FHIR/DSTU2/',
-    //   },
-    //   {
-    //     OrganizationName: 'Ardent',
-    //     FHIRPatientFacingURI:
-    //       'https://epicproxy.ardenthealth.com/fhir/api/FHIR/DSTU2/',
-    //   },
-    //   {
-    //     OrganizationName: 'Ascension - Providence Healthcare Network',
-    //     FHIRPatientFacingURI:
-    //       'https://stofo.providence-waco.org/FHIRProxy/api/FHIR/DSTU2/',
-    //   },
-    //   {
-    //     OrganizationName: 'Ascension WI',
-    //     FHIRPatientFacingURI:
-    //       'https://eprescribe.wfhc.org/FHIRproxy/api/FHIR/DSTU2/',
-    //   },
-    //   {
-    //     OrganizationName: 'Atlantic Health',
-    //     FHIRPatientFacingURI:
-    //       'https://soapproxy.atlantichealth.org/FHIRPrd/api/FHIR/DSTU2/',
-    //   },
-    //   {
-    //     OrganizationName: 'Atrius Health',
-    //     FHIRPatientFacingURI:
-    //       'https://iatrius.atriushealth.org/FHIR/api/FHIR/DSTU2/',
-    //   },
-    //   {
-    //     OrganizationName: 'Aurora Health Care - myAurora',
-    //     FHIRPatientFacingURI:
-    //       'https://EpicFHIR.aurora.org/FHIR/MYAURORA/api/FHIR/DSTU2/',
-    //   },
-    //   {
-    //     OrganizationName: 'Austin Regional Clinic',
-    //     FHIRPatientFacingURI:
-    //       'https://mobileprod.arcmd.com/FHIR/api/FHIR/DSTU2/',
-    //   },
-    //   {
-    //     OrganizationName: 'Baptist Health – KY \u0026 IN',
-    //     FHIRPatientFacingURI:
-    //       'https://epicproxy.bhsi.com/PRD-FHIR/api/FHIR/DSTU2/',
-    //   },
-    // ],
-    fontLoaded: false,
+    hasLoggedInOnce: false,
+    accessToken: '',
+    accessTokenExpirationDate: '',
+    refreshToken: ''
+  };
+
+  animateState(nextState: $Shape<State>, delay: number = 0) {
+    setTimeout(() => {
+      this.setState(() => {
+        LayoutAnimation.easeInEaseOut();
+        return nextState;
+      });
+    }, delay);
   }
 
-  async componentWillMount() {
-    await Font.loadAsync({
-      Roboto: require('native-base/Fonts/Roboto.ttf'),
-      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-    })
-    this.setState({ fontLoaded: true })
-  }
+  authorize = async () => {
+    try {
+      // Add SMART flow to set serviceConfiguration using metadata endpoint here
 
-  componentDidMount() {}
+      const authState = await authorize(config);
+
+      this.animateState(
+        {
+          hasLoggedInOnce: true,
+          accessToken: authState.accessToken,
+          accessTokenExpirationDate: authState.accessTokenExpirationDate,
+          refreshToken: authState.refreshToken
+        },
+        500
+      );
+    } catch (error) {
+      Alert.alert('Failed to log in', error.message);
+    }
+  };
+
+  refresh = async () => {
+    try {
+      const authState = await refresh(config, {
+        refreshToken: this.state.refreshToken
+      });
+
+      this.animateState({
+        accessToken: authState.accessToken || this.state.accessToken,
+        accessTokenExpirationDate:
+          authState.accessTokenExpirationDate ||
+          this.state.accessTokenExpirationDate,
+        refreshToken: authState.refreshToken || this.state.refreshToken
+      });
+    } catch (error) {
+      Alert.alert('Failed to refresh token', error.message);
+    }
+  };
+
+  revoke = async () => {
+    try {
+      await revoke(config, {
+        tokenToRevoke: this.state.accessToken,
+        sendClientId: true
+      });
+      this.animateState({
+        accessToken: '',
+        accessTokenExpirationDate: '',
+        refreshToken: ''
+      });
+    } catch (error) {
+      Alert.alert('Failed to revoke token', error.message);
+    }
+  };
 
   render() {
-    const { organizationList, fontLoaded } = this.state
+    const { state } = this;
 
-    if (!fontLoaded) {
-      return (
-        <Container>
-          <Header />
-          <Content>
-            <Spinner />
-          </Content>
-        </Container>
-      )
-    }
-    return (
-      <Container>
-        <Header>
-          <Left />
-          <Body>
-            <Title>
-              SMART Pilot
-              <Icon
-                type="FontAwesome"
-                name="plane"
-                style={{ color: 'white' }}
-              />
-            </Title>
-          </Body>
-          <Right />
-        </Header>
-        <Content>
-          <InstitutionList institutions={organizationList} />
-        </Content>
-        <Footer>
-          <FooterTab>
-            <Button vertical>
-              <Icon name="apps" />
-              <Text>Institution List</Text>
-            </Button>
-            <Button vertical>
-              <Icon name="person" />
-              <Text>Log out</Text>
-            </Button>
-          </FooterTab>
-        </Footer>
-      </Container>
-    )
+    return !state.accessToken ? <InstitutionList /> : <PatientInfo />;
   }
 }
