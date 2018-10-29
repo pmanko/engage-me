@@ -1,7 +1,0 @@
-{
-  "hostType": "localhost",
-  "lanType": "ip",
-  "dev": true,
-  "minify": false,
-  "urlRandomness": "3r-5ig"
-}
