@@ -10,7 +10,7 @@ export default class Heading extends React.Component<Props> {
         <Left />
         <Body>
           <Title>
-            SMART Pilot
+            SMART Pilot&nbsp;
             <Icon type="FontAwesome" name="plane" style={{ color: 'white' }} />
           </Title>
         </Body>
