@@ -3,15 +3,6 @@
 import React, { Component } from 'react';
 
 // import { StyleSheet, Text, View } from 'react-native';
-import {
-  Container,
-  Content,
-  Text,
-  Button,
-  Footer,
-  FooterTab,
-  Icon
-} from 'native-base';
 import { UIManager, LayoutAnimation, Alert } from 'react-native';
 import { authorize, refresh, revoke } from 'react-native-app-auth';
 
@@ -116,27 +107,6 @@ export default class App extends Component<{}, State> {
   render() {
     const { state } = this;
 
-    return (
-      <Container>
-        <Heading />
-        <Content>
-          {!state.accessToken ? <InstitutionList /> : <PatientInfo />}
-        </Content>
-        <Footer>
-          {!!state.accessToken && (
-            <FooterTab>
-              <Button vertical>
-                <Icon name="apps" />
-                <Text>Institution List</Text>
-              </Button>
-              <Button vertical>
-                <Icon name="person" />
-                <Text>Log out</Text>
-              </Button>
-            </FooterTab>
-          )}
-        </Footer>
-      </Container>
-    );
+    return !state.accessToken ? <InstitutionList /> : <PatientInfo />;
   }
 }

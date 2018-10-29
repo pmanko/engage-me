@@ -11,7 +11,8 @@
     "filenames/match-regex": 0,
     "quotes": "off",
     "flowtype/no-types-missing-file-annotation": 0,
-    "arrow-parens": "off"
+    "arrow-parens": "off",
+    "no-invalid-this": 0
   },
   "globals": {
     "fetch": false

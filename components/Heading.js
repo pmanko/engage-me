@@ -1,7 +1,9 @@
+// @flow
+
 import React from 'react';
 import { Header, Left, Body, Right, Title, Icon } from 'native-base';
 
-export default class Heading extends React.Component {
+export default class Heading extends React.Component<Props> {
   render() {
     return (
       <Header>
