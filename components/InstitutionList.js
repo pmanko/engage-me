@@ -33,10 +33,10 @@ export default class InstitutionList extends React.Component {
 
   async componentDidMount() {
     const endpoints = await fetchEndpoints();
-    const metadata = await fetchMetadata();
+    // const metadata = await fetchMetadata();
     //console.warn(metadata.rest[0].resource);
     this.setState({
-      chosenInstitution: '',
+      chosenInstitution: null,
       loading: false,
       institutions: endpoints,
       allInstitutions: endpoints,
@@ -62,9 +62,9 @@ export default class InstitutionList extends React.Component {
     });
   };
 
-  handleChooseInstitution = () => {
+  handleChooseInstitution = institution => {
     this.setState({
-      chosenInstitution: 'key'
+      chosenInstitution: institution
     });
   };
 
@@ -81,21 +81,27 @@ export default class InstitutionList extends React.Component {
     });
   };
 
-  renderInstitution = institution => (
-    <ListItem noIndent onPress={this.handleChooseInstitution}>
-      <Left>
-        <Button transparent onPress={this.handleChooseInstitution}>
-          <Icon name="ios-information-circle-outline" />
-        </Button>
-        <Text numberOfLines={1}>{institution.OrganizationName}</Text>
-      </Left>
-      <Right>
-        <Button transparent onPress={this.handleShowPatientInfo}>
-          <Icon name="ios-arrow-forward" />
-        </Button>
-      </Right>
-    </ListItem>
-  );
+  renderInstitution = institution => {
+    const { handleOnLogin } = this.props;
+    return (
+      <ListItem noIndent onPress={this.handleChooseInstitution}>
+        <Left>
+          <Button transparent onPress={this.handleChooseInstitution}>
+            <Icon name="ios-information-circle-outline" />
+          </Button>
+          <Text numberOfLines={1}>{institution.OrganizationName}</Text>
+        </Left>
+        <Right>
+          <Button
+            transparent
+            onPress={() => this.handleChooseInstitution(institution)}
+          >
+            <Icon name="ios-arrow-forward" />
+          </Button>
+        </Right>
+      </ListItem>
+    );
+  };
 
   renderHeader = () => (
     <Header>
@@ -114,6 +120,8 @@ export default class InstitutionList extends React.Component {
   );
 
   render() {
+    const { authorize } = this.props;
+
     const {
       loading,
       institutions,
@@ -130,7 +138,10 @@ export default class InstitutionList extends React.Component {
       return (
         <Container>
           {this.renderHeader()}
-          <EndpointInfo metadata={metadata} />
+          <PatientInfo
+            authorize={authorize}
+            chosenInstitution={chosenInstitution}
+          />
         </Container>
       );
     }

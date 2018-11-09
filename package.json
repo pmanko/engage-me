@@ -9,6 +9,7 @@
     "flow": "flow"
   },
   "dependencies": {
+    "jsonpath": "^1.0.0",
     "native-base": "^2.8.1",
     "react": "16.5.0",
     "react-native": "0.57.0",

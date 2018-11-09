@@ -1,16 +1,28 @@
 export const fetchEndpoints = async () => {
-  const response = await fetch('https://open.epic.com/MyApps/EndpointsJson');
-  const endpoints = await response.json();
+  // const response = await fetch('https://open.epic.com/MyApps/EndpointsJson');
+  const endpoints = { Entries: [] }; // await response.json();
+
+  const testing = {
+    OrganizationName: 'AA: Open Epic Test',
+    FHIRPatientFacingURI: 'https://open-ic.epic.com/argonaut/api/FHIR/Argonaut/'
+  };
+
+  endpoints.Entries.unshift(testing);
+
+  // console.warn(endpoints.Entries);
 
   return endpoints.Entries;
 };
 
-export const fetchMetadata = async () => {
-  const response = await fetch(
-    'https://epicsoapproxyprd.mountsinai.org/FHIR-PRD/api/FHIR/DSTU2/metadata?_format=json'
-  );
+export const fetchMetadata = async uri => {
+  const response = await fetch(`${uri}metadata?_format=json`);
   const metadata = await response.json();
 
+  // const jp = require('jsonpath');
+
+  // console.warn(jp.query(metadata, '$..software..name'));
+
+  console.warn(metadata.software);
   return metadata;
 };
 
