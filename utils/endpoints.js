@@ -23,6 +23,7 @@ export const fetchMetadata = async uri => {
   // console.warn(jp.query(metadata, '$..software..name'));
 
   console.warn(metadata.software);
+
   return metadata;
 };
 

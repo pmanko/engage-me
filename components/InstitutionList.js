@@ -65,6 +65,7 @@ export default class InstitutionList extends React.Component {
   handleChooseInstitution = institution => {
     this.setState({
       chosenInstitution: institution
+
     });
   };
 
@@ -103,6 +104,7 @@ export default class InstitutionList extends React.Component {
     );
   };
 
+
   renderHeader = () => (
     <Header>
       <Left>
@@ -121,7 +123,6 @@ export default class InstitutionList extends React.Component {
 
   render() {
     const { authorize } = this.props;
-
     const {
       loading,
       institutions,

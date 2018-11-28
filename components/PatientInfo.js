@@ -27,6 +27,7 @@ export class PatientInfo extends Component {
       //  patientInfo,
       //      resourceCounts: counts,
       loading: true
+
     });
   }
 

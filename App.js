@@ -47,6 +47,7 @@ const config = {
 //   // }
 // };
 
+
 export default class App extends Component<{}, State> {
   state = {
     hasLoggedInOnce: false,
@@ -132,5 +133,6 @@ export default class App extends Component<{}, State> {
     ) : (
       <PatientInfo />
     );
+
   }
 }

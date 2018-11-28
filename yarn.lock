@@ -2001,7 +2001,6 @@ escodegen@^1.8.1:
     optionator "^0.8.1"
   optionalDependencies:
     source-map "~0.6.1"
-
 eslint-config-formidable@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/eslint-config-formidable/-/eslint-config-formidable-4.0.0.tgz#b3a472780e42ae46c288af537e808e45f8b7c6dd"
@@ -3488,6 +3487,7 @@ metro-cache@0.45.6:
   resolved "https://registry.yarnpkg.com/metro-cache/-/metro-cache-0.45.6.tgz#7ca9f66bc038a309d21e4c5264b806a692ca5a55"
   integrity sha512-v7q2pLsI7oABEjpwPJwTd7ufwKvpctVOddcffI/2hRhuJC/seLlqkRt7kv+Q/WfaR9X4KLcEoIjZmgNy4cw1ag==
   dependencies:
+
     jest-serializer "23.0.1"
     metro-core "0.45.6"
     mkdirp "^0.5.1"
