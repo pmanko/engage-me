@@ -1,4 +1,4 @@
-package com.smartpilot;
+package com.engageme;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "SmartPilot";
+        return "EngageMe";
     }
 }

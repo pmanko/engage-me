@@ -113,10 +113,7 @@ export default class InstitutionList extends React.Component {
         </Button>
       </Left>
       <Body>
-        <Title>
-          SMART Pilot&nbsp;
-          <Icon type="FontAwesome" name="plane" style={{ color: 'white' }} />
-        </Title>
+        <Title>Engage Me!</Title>
       </Body>
     </Header>
   );
