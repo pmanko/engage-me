@@ -9,6 +9,7 @@ import { authorize, refresh, revoke } from 'react-native-app-auth';
 import InstitutionList from './components/InstitutionList';
 import Heading from './components/Heading';
 import PatientInfo from './components/PatientInfo';
+import { fetchMetadata } from './utils/endpoints';
 
 UIManager.setLayoutAnimationEnabledExperimental &&
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -21,17 +22,31 @@ type State = {
 };
 
 const config = {
-  clientId: 'any-string-for-smart-smart-sandbox',
-  clientSecret: 'any-string-for-smart-sandbox',
-  redirectUrl: 'com.smartpilot.app://redirect',
-  scopes: ['profile', 'patient/*.*'],
+  clientId: '8XYxp_-joPqWQlKD5pt5zkkXm1WnjE3p',
+  clientSecret: 'PrVhT13MgyTCarD3f3krLIv_cVjYdZoMqWbsaOCA',
+  redirectUrl: '  ', //note: path is required
+  scopes: ['profile', 'patient/*.read', 'user/*.*'],
   serviceConfiguration: {
-    authorizationEndpoint:
-      'https://launch.smarthealthit.org/v/r3/sim/eyJrIjoiMSJ9/auth/authorize',
-    tokenEndpoint:
-      'https://launch.smarthealthit.org/v/r3/sim/eyJrIjoiMSJ9/auth/token'
+    authorizationEndpoint: '',
+    tokenEndpoint: ''
+    //revocationEndpoint: 'https://login.uber.com/oauth/v2/revoke'
   }
 };
+
+// const config = {
+//   issuer: 'https://demo.identityserver.io',
+//   clientId: 'native.code',
+//   redirectUrl: 'com.smartpilot.app://redirect',
+//   additionalParameters: {},
+//   scopes: ['openid', 'profile', 'email', 'offline_access']
+
+//   // serviceConfiguration: {
+//   //   authorizationEndpoint: 'https://demo.identityserver.io/connect/authorize',
+//   //   tokenEndpoint: 'https://demo.identityserver.io/connect/token',
+//   //   revocationEndpoint: 'https://demo.identityserver.io/connect/revoke'
+//   // }
+// };
+
 
 export default class App extends Component<{}, State> {
   state = {
@@ -50,9 +65,15 @@ export default class App extends Component<{}, State> {
     }, delay);
   }
 
-  authorize = async () => {
+  // const authState = await authorize(config);
+
+  authorize = async d => {
     try {
       // Add SMART flow to set serviceConfiguration using metadata endpoint here
+
+      const md = await fetchMetadata(d.FHIRPatientFacingURI);
+
+      console.warn(config);
 
       const authState = await authorize(config);
 
@@ -107,6 +128,11 @@ export default class App extends Component<{}, State> {
   render() {
     const { state } = this;
 
-    return !state.accessToken ? <InstitutionList /> : <PatientInfo />;
+    return !state.accessToken ? (
+      <InstitutionList authorize={this.authorize} />
+    ) : (
+      <PatientInfo />
+    );
+
   }
 }

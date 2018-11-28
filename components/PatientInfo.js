@@ -12,19 +12,22 @@ export class PatientInfo extends Component {
   };
 
   async componentDidMount() {
-    const { resources } = this.props;
+    const { authorize, chosenInstitution } = this.props;
 
-    const patientInfo = await fetchPatientData();
-    const counts = [];
+    // const patientInfo = await fetchPatientData();
+    // const counts = [];
 
-    for (var resource of resources) {
-      counts.push(await fetchPatientResourceCount(resource.type));
-    }
+    // for (var resource of resources) {
+    //   counts.push(await fetchPatientResourceCount(resource.type));
+    // }
+
+    authorize(chosenInstitution);
 
     this.setState({
-      patientInfo,
-      resourceCounts: counts,
-      loading: false
+      //  patientInfo,
+      //      resourceCounts: counts,
+      loading: true
+
     });
   }
 
