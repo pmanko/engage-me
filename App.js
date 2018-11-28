@@ -23,7 +23,7 @@ type State = {
 const config = {
   clientId: 'any-string-for-smart-smart-sandbox',
   clientSecret: 'any-string-for-smart-sandbox',
-  redirectUrl: 'com.smartpilot.app://redirect',
+  redirectUrl: 'com.engageme.app://redirect',
   scopes: ['profile', 'patient/*.*'],
   serviceConfiguration: {
     authorizationEndpoint:
